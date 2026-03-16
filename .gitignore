@@ -1,4 +1,11 @@
+# Database logs and temporary files
 data/*.log
+
+# Python bytecode and cache
 src/__pycache__/
+
+# Python virtual environment
 venv/
+
+# Environment variables (Sensitive info)
 .env
