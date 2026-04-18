@@ -31,6 +31,8 @@ I implemented a **Medallion-style Architecture** using dbt layers to ensure data
    - **Output:** **`dim_customers`**, **`dim_products`**, and **`fct_sales`**.
    - **Bonus:** Created a **`fct_sales_wide`** (Denormalized Table) to provide a "ready-to-use" view for PowerBI analysts.
 
+![Project Architecture](images/architecture_diagram.png)
+
 ---
 
 ## 🛠️ Key Technical Features
