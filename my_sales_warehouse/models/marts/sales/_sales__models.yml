@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: The primary dimension table for customer data, providing a single consolidated view of each customer across all systems.
+    columns:
+      - name: customer_key
+        description: Unique surrogate key for each customer, used as the primary identifier within the data warehouse and for joining with fact tables.
+        data_tests: [unique, not_null]
+
+  - name: dim_products
+    description: The primary dimension table for products, containing all descriptive attributes and categorization for the product catalog.
+    columns:
+      - name: product_key
+        description: Unique surrogate key for each product, ensuring consistent identification across different source systems and categories.
+        data_tests: [unique, not_null]
+
+  - name: fct_sales
+    description: The central fact table containing all sales transactions. It records measurable, quantitative data for every sale and serves as the foundation for revenue analysis.
+    columns:
+      - name: sales_key
+        description: Unique surrogate key for each sales transaction line item, ensuring granular tracking of every record in the fact table.
+        data_tests: [unique, not_null]
+
+      - name: customer_key
+        description: Foreign key linking the sales transaction to a specific customer in the dim_customers table.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_key
+
+      - name: product_key
+        description: Foreign key linking the sales transaction to a specific product in the dim_products table.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_key
+
+  - name: fct_sales_wide
+    description: The final reporting layer. Denormalized for PowerBI.
+    columns:
+      - name: sales_key
+        data_tests: [unique, not_null]

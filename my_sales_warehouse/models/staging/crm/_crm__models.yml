@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_crm__cust_info
+    description: >
+      Cleansed and standardized customer master data sourced from the CRM system.
+      This model handles initial data type casting and basic cleaning to ensure a reliable foundation for downstream customer analytics.
+    columns:
+      - name: customer_number
+        description: >
+          The unique business identifier for each customer.
+          This field is validated to be unique and non-null to prevent duplication in final reporting.
+        data_tests: [unique, not_null]
+
+  - name: stg_crm__prd_info
+    description: >
+      The primary staging model for product information.
+      It provides a refined list of all product items available in the CRM, serving as the trusted source for product-related dimensions.
+    columns:
+      - name: product_id
+        description: >
+          The primary key for product records.
+          Ensures that every product SKU is uniquely identified and properly populated for inventory and sales tracking.
+        data_tests: [unique, not_null]
+
+  - name: stg_crm__sales_details
+    description: >
+      Detailed sales transaction records from the CRM system at the line-item level.
+      Each row represents a specific product within an order, providing the base grain for sales performance analysis. This model is critical for calculating revenue, quantities, and product-level margins.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_number, product_number]
+
+    columns:
+      - name: order_number
+        description: >
+          The unique identifier for a sales transaction as assigned by the source CRM system. It serves as the primary link to group multiple line items within a single purchase event.
+          Used for counting total orders and tracking customer purchase history.
+        data_tests:
+          - not_null
+
+    columns:
+      - name: product_number
+        description: >
+          The specific identifier for the individual product or SKU (Stock Keeping Unit) associated with an order line item.
+          This field is essential for product-level performance analysis, inventory tracking, and categorizing sales by item type.
+        data_tests:
+          - not_null

@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: erp
+    description: >
+      Primary Enterprise Resource Planning (ERP) database schema.
+      This source contains the immutable raw operational data, including customer profiles, geographic locations, and product hierarchies, ingested directly from the production environment.
+    database: DWH_MSSQL
+    schema: raw
+
+    freshness:
+      warn_after: {'count': 24, period: hour}
+      error_after: {'count': 48, period: hour}
+    loaded_at_field: dwh_load_date
+
+    tables:
+      - name: erp_cust_az12
+        description: >
+          Raw customer master records from the ERP system.
+          Contains core account attributes, registration details, and system-generated identifiers for all business clients.
+
+      - name: erp_loc_a101
+        description: >
+          Direct extraction of the location and address registry.
+          This table stores the raw mapping of customer accounts to their physical, billing, and shipping destinations.
+          
+      - name: erp_px_cat_g1v2
+        description: >
+          Operational product category and classification data.
+          It provides the raw structural hierarchy used by the business to group and organize products for inventory management.

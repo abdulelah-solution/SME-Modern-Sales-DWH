@@ -1,91 +1,69 @@
-# 🚀 Medallion Data Warehouse: From Chaos to Clarity
+# 🚀 Upgrading DWH: From Chaos to Clarity (Level 2)
+***Transforming Fragmented SME Data into Scalable Business Intelligence***
 
-> "Data is the new oil, but only if it's refined." This project is a journey of discipline and technical growth—a complete end-to-end Data Warehouse solution built from the ground up, transforming raw, messy CSV files into a structured Gold-standard Star Schema.
+## 📌 The Problem: The "Data Chaos" in SMEs
+Small and Medium Enterprises (SMEs) often struggle with "Data Silos." Sales data lives in a **CRM**, inventory data lives in an **ERP**, and spreadsheets are scattered everywhere.
+- **The Result:** Inaccurate profit margins, duplicated customer records, and a "gut-feeling" approach to decision-making instead of a data-driven one.
 
----
-
-## 🌟 The Vision
-The goal was clear: Take fragmented data from two different sources (**CRM** and **ERP**) and build a robust, automated pipeline. This project implements the **Medallion Architecture**, ensuring data quality at every step:
-
-* **Bronze:** Raw ingestion of source files.
-* **Silver:** Cleaning, standardizing, and reconciling data.
-* **Gold:** Strategic modeling for BI and Analytics.
-
----
-
-## 🏗️ Project Architecture & Folder Structure
-Organization is the key to scalability. Here is how the project is structured:
-
-```text
-dwh_database/ 
-├── data/               # Source CSV files (CRM & ERP) + Application Logs
-├── sql_scripts/
-│   ├── ddl/            # Database and Schema initialization scripts
-│   ├── silver/         # Transformation logic (Cleaning & Harmonization)
-│   │   ├── crm/        # CRM-specific staging scripts
-│   │   └── erp/        # ERP-specific staging scripts
-│   └── gold/           # Final Star Schema (Dimensions & Facts)
-├── src/                # Python Core: Database utilities & Orchestration logic
-├── main.py             # The Maestro: One-click pipeline execution
-├── .env                # Secure Environment variables (ignored by git)
-└── requirements.txt    # Project dependencies
+## 💡 The Solution: Modern Data Stack (ELT)
+This project demonstrates a complete migration from a **Monolithic ETL** (Python-heavy) to a **Modern ELT** architecture. By decoupling **Ingestion** from **Transformation**, we create a system that is:
+1. **Scalable:** Handles growing data without breaking.
+2. **Reliable:** Automated testing ensures the numbers are always right.
+3. **Transparent:** Full lineage shows exactly how a raw CSV became a Profit Report.
 
 ---
 
-🛠️ Tech Stack & Key Features
+## 🏗️ System Architecture
+The project is divided into two major components:
+### 1. The Ingestion Engine (Python)
+Located in the **`/python`** folder, this layer acts as the **Data Pipeline**. It extracts raw data from CSV files and loads it directly into the **SQL Server (Raw Layer)**.
+- **Philosophy:** Keep it simple. Python moves the data; it doesn't touch the logic.
 
-    ◉ Python & SQLAlchemy: For automated orchestration and database connectivity.
-
-    ◉ SQL Server (T-SQL): The powerhouse for data transformations and modeling.
-
-    ◉ Medallion Architecture: Three-layer approach for superior data quality.
-
-    ◉ Data Reconciliation: Advanced logic to fix missing prices, quantities, and dates.
-
-    ◉ SCD Type 2 Ready: Managing product history and active versions.
-
----
-
-🚀 How to Run the Pipeline
-
-    1. Clone the Repository.
-
-    2. Configure Environment: Create a .env file with your SQL Server credentials.
-
-    3. Setup Database: Execute /sql_scripts/ddl/db_and_schemas.sql.
-
-    4. Execute: Simply run:
-    python main.py
-
-    5. Monitor: Check the data/app.log to see the live progress of each phase.
+### 2. The Transformation Engine (dbt)
+Located in the **`/my_sales_warehouse`** folder, this is where the "magic" happens.
+- **Staging:** Cleaning the mess.
+- **Intermediate:** Merging CRM & ERP data using **MD5 Hashing** to create unique **Surrogate Keys**.
+- **Marts:** Structuring data into a **Star Schema** (Facts & Dimensions) for high-performance analytics.
 
 ---
 
-📈 The Journey So Far (Version 1.0)
-
-This project represents more than just technical skills; it represents discipline. Every line of code was written with a focus on:
-    ◉ Quality: No "garbage" data enters the Gold layer.
-
-    ◉ Consistency: Harmonizing different systems (CRM vs ERP) into a single source of truth.
-
-    ◉ Professionalism: Following industry standards in naming, documentation, and folder structure.
+## 📈 Business Value & Benefits
+By implementing this architecture, a company gains:
+- **Single Version of the Truth:** No more debating which report is correct.
+- **Cost Efficiency:** Using **`dbt-core`** keeps infrastructure costs low while maintaining enterprise-grade quality.
+- **Fast Insights:** The **Wide Table** (**`fct_sales_wide`**) allows analysts to build PowerBI dashboards in minutes, not days.
+- **Future Proofing:** Easily swap a CSV source for a cloud API without rebuilding the entire system.
 
 ---
 
-🔮 What’s Next?
-
-The journey doesn't stop here. Version 2.0 is already on the horizon:
-    ◉ ☁️ Cloud Integration: Moving the warehouse to a cloud environment.
-    
-    ◉ ⚙️ Airflow Orchestration: Transitioning from simple Python scripts to advanced workflow management.
-    
-    ◉ 📊 Dashboarding: Connecting the Gold layer to Power BI for visual storytelling.
+## 🛠️ Tech Stack
+- **Language:** Python 3.x (Pandas, SQLAlchemy)
+- **Modeling:** dbt-core (Data Build Tool)
+- **Database:** Microsoft SQL Server
+- **Version Control:** Git
 
 ---
 
-## ✍️ About the Author
-**Abdulelah** – A Data Engineer in the making, driven by curiosity and fueled by discipline. 
+## 🚦 How to Initialize the Project
+### Phase 1: Data Ingestion
+**`python main.py`**
 
-🔗 **Connect with me on [LinkedIn](https://www.linkedin.com/in/abdulelah-muhmin-a215a41a1/)**
+This triggers the Python scripts to load raw data into the staging environment.
 
-> *"I am coming, and the best is yet to be, by the will of Allah."*
+### Phase 2: dbt Transformation
+**`cd my_sales_warehouse`**
+
+**`dbt deps`**
+
+**`dbt build`**
+
+This command compiles the SQL, materializes the tables, and runs 47 automated data quality tests.
+
+### Project Status: 🔵 Level 2 (Production Ready) | Next Step: Level 3 (Cloud Migration & Orchestration)
+
+---
+
+## 📬 Contact & Collaboration
+I am a **Data Analyst / Engineer** passionate about helping SMEs turn their data chaos into profit-driving insights. Let’s connect!
+- **LinkedIn:** [**Abdulelah's Profile**](https://www.linkedin.com/in/abdulelah-muhmin-a215a41a1/)
+- **GitHub:** [**Abdulelah's Repositories**](https://github.com/abdulelah-solution)

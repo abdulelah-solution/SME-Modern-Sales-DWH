@@ -1,0 +1,41 @@
+version: 2
+
+sources:
+  - name: crm
+    description: >
+      This source contains raw data extracted from the Enterprise CRM system. 
+      It serves as the primary foundation for customer demographics, product catalogs, 
+      and transactional sales data. Data is ingested into the 'raw' schema via 
+      automated ELT pipelines.
+    database: DWH_MSSQL
+    schema: raw
+
+    freshness:
+      warn_after: {'count': 24, period: hour}
+      error_after: {'count': 48, period: hour}
+    loaded_at_field: dwh_load_date
+
+    tables:
+      - name: crm_cust_info
+        description: >
+          Master list of customers sourced from the CRM system. 
+          Granularity: One row per unique customer.
+        columns:
+          - name: cst_id
+            description: The unique identifier (Primary Key) for each customer.
+
+      - name: crm_prd_info
+        description: >
+          Product catalog containing all items available for sale. 
+          Granularity: One row per unique product SKU.
+        columns:
+          - name: prd_id
+            description: The unique identifier (Primary Key) for each product.
+
+      - name: crm_sales_details
+        description: >
+          Transactional table containing historical sales records. 
+          Granularity: One row per individual order number. 
+        columns:
+          - name: sls_ord_num
+            description: The unique identifier (Primary Key) for each sales transaction.

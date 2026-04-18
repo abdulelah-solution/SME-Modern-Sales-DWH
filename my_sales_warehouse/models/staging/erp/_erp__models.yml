@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_erp__cust_az12
+    description: >
+      Staging model for customer core data extracted from the ERP system (Module AZ12).
+      This table serves as the authoritative source for legal customer identities and account registrations.
+    columns:
+      - name: customer_id
+        description: >
+          The unique system-generated identifier for each customer account within the ERP.
+          Validated to ensure integrity for cross-functional joins.
+        data_tests: [unique, not_null]
+
+  - name: stg_erp__loc_a101
+    description: >
+      Staging table for customer geographical locations and branch addresses (Module A101).
+      It maps customer IDs to their respective physical or billing locations.
+    columns:
+      - name: customer_id
+        description: >
+          Foreign key linking location data to the primary customer record.
+          Verified as unique in this context to ensure one primary location per record.
+        data_tests: [unique, not_null]
+
+  - name: stg_erp__px_cat_g1v2
+    description: >
+      Refined product categorization metadata (Module G1V2).
+      This model organizes products into logical hierarchies for granular sales performance analysis.
+    columns:
+      - name: category_id
+        description: >
+          Unique identifier for each product category.
+          Essential for segmenting revenue and inventory metrics in downstream marts.
+        data_tests: [unique, not_null]
